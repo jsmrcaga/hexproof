@@ -1,0 +1,10 @@
+div.dex-mana-cost {
+	display: flex;
+	flex-direction: row;
+}
+
+div.dex-mana-cost img {
+	min-width: 20px;
+	max-width: 40px;
+	margin-left: 3px;
+}

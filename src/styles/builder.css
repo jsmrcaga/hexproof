@@ -1,0 +1,82 @@
+div.dex-builder-filters-container {
+	margin-bottom: 20px;
+}
+
+div.dex-builder-filters-container div.dex-buidler.title {
+	display: block;
+	width: 100%;
+}
+
+div.dex-builder-filters-container div.dex-builder-filters {
+	display: flex;
+	align-items: center;
+	padding-top: 5px;
+}
+
+div.dex-builder-filters-container div.dex-builder-buttons {
+	display: flex;
+	margin-left: auto;
+}
+
+div.dex-builder-filters-container div.dex-dropdown {
+	margin-left: 10px;
+}
+
+div.dex-builder-buttons div.dex-builder-button {
+	width: 35px;
+	height: 35px;
+	margin-left: 15px;
+	cursor: pointer;
+}
+
+div.dex-builder-buttons div.dex-builder-button img {
+	max-width: 100%;
+	transition: opacity 0.15s ease-in-out;
+}
+
+div.dex-builder-buttons div.dex-builder-button img:hover {
+	opacity: 0.5;
+}
+
+/* Card columns */
+div.dex-builder-columns {
+	display: flex;
+}
+
+div.dex-card-column {
+	max-width: 400px;
+	width: 400px;
+}
+
+div.dex-droppable-card {
+	padding-right: 50px;
+}
+
+div.dex-droppable-card:last-child {
+	padding-right: 0;
+}
+
+div.dex-builder-columns input {
+	width: 100%;
+}
+
+div.dex-card-column div.dex-card-column-title {
+	width: 100%;
+	display: flex;
+	margin-bottom: 20px;
+}
+
+div.dex-card-column div.dex-card-column-title span.title {
+	color: #999;
+}
+
+div.dex-card-column div.dex-card-column-title span.card-count {
+	color: #999;
+	display: block;
+	margin-left: auto;
+}
+
+div.dex-builder-content {
+	display: flex;
+}
+

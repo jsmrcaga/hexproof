@@ -1,0 +1,40 @@
+div.dex-collection-card {
+	width: 300px;
+	height: 175px;
+	margin-right: 25px;
+	margin-bottom: 25px;
+	box-sizing: border-box;
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	cursor: pointer;
+	text-shadow: 1px 1px 1px #000;
+	box-shadow: 1px 1px 1px #000;
+	background: #323232;
+	position: relative;
+}
+div.dex-collection-card div.dex-collection-card-mana-cost,
+div.dex-collection-card div.dex-collection-card-name,
+div.dex-collection-card div.dex-collection-card-description {
+	z-index: 1;
+}
+
+div.dex-collection-card div.dex-collection-card-description {
+	color: #D3D3D3;
+}
+
+div.dex-collection-card div.dex-collection-card-image {
+	width: 100%;
+	max-height: 100%;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+}
+
+div.dex-collection-card div.dex-collection-card-image img {
+	width: 100%;
+	display: block;
+}

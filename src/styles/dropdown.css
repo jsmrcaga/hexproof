@@ -1,0 +1,82 @@
+div.dex-dropdown {
+	display: flex;
+	position: relative;
+	height: auto;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	background: black;
+	border-radius: 10px;
+	border: 2px solid #676767;
+	max-height: 45px;
+}
+
+div.dex-dropdown div.dex-dropdown-dropper {
+	margin-left: 20px;
+	cursor: pointer;
+}
+
+div.dex-dropdown div.dex-dropdown-dropdown {
+	position: absolute;
+	top: 0;
+	left: -2px;
+	display: none;
+	width: 100%;
+	background: black;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border: solid 2px #676767;
+}
+
+div.dex-dropdown-option {
+	box-sizing: border-box;
+	padding: 5px 15px;
+	cursor: pointer;
+}
+
+div.dex-dropdown-option:hover {
+	text-decoration: underline;
+}
+
+div.dex-dropdown-group {
+	padding: 5px 10px;
+	color: #676767;
+}
+
+div.dex-dropdown div.dex-dropdown-dropdown.open {
+	display: block;
+	top: 35px;
+}
+
+div.dex-dropdown-value span.dex-dropdown-value-group {
+	color: #676767;
+}
+
+div.dex-dropdown-value span.dex-dropdown-value-value {
+	color: white;
+}
+
+div.dex-dropdown-value span.dex-dropdown-value-value.placeholder {
+	color: #676767;
+}
+
+div.dex-mana-filter {
+	display: flex;
+}
+
+div.dex-mana-filter div.dex-mana-mana {
+	width: 35px;
+	height: 35px;
+	margin-right: 11px;
+	cursor: pointer;
+}
+
+div.dex-mana-filter div.dex-mana-mana img {
+	max-width: 100%;
+	opacity: 0.2;
+	transition: opacity 0.2s ease-in-out;
+}
+
+div.dex-mana-filter div.dex-mana-mana img.active {
+	opacity: 1;
+}
+

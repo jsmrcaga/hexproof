@@ -1,0 +1,41 @@
+div.dex-card-input {
+	display: flex;
+	border-bottom: 1px solid #676767;
+	font-size: 18px;
+	margin-bottom: 15px;
+}
+
+div.dex-card-input div.dex-mana-cost {
+	margin-left: auto;
+}
+
+div.dex-card-input span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	overflow-wrap: break-word;
+	white-space: nowrap;
+	margin-right: 10px;
+}
+
+input.dex-text-input {
+	background: transparent;
+	font-family: 'Noto Sans';
+	font-size: 18px;
+	border: none;
+	outline: none;
+	padding: 5px;
+	color: white;
+	box-sizing: border-box;
+}
+
+input[type="number"] {
+	background: none;
+	outline: none;
+	border: none;
+	color: white;
+	font-family: 'Noto Sans';
+	font-size: 18px;
+	display: inline-block;
+	width: 35px !important;
+	color: #676767;
+}

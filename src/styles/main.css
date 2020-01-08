@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700&display=swap');
+
+body {
+	margin: 0;
+	background-color: #232323;
+	color: white;
+	padding: 0px 100px;
+	font-family: 'Noto Sans';
+}
+
+div.dex-header {
+	margin-top: 10px;
+	height: 65px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+div.dex-collection-section {
+	margin-bottom: 25px;
+}
+
+div.dex-collection-section div.dex-collection-section-content {
+	display: flex;
+	padding-top: 20px;
+}
+
+div.dex-collection-section div.dex-collection-section-title {
+	display: flex;
+	width: 100%;
+}
+
+div.dex-collection-section span.dex-collection-view-all {
+	display: inline-block;
+	margin-left: 10px;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+div.dex-collection-section span.dex-collection-section-count {
+	display: inline-block;
+	margin-left: auto;
+	color: #999;
+}
+
+div.dex-collection-section span.dex-collection-section-name {
+	color: #999;
+}
+
+/* USER BADGE */
+div.dex-user-badge {
+	min-width: 275px;
+	height: 65px;
+	display: flex;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 10px;
+	padding-right: 15px;
+	border-radius: 10000px;
+	background: linear-gradient(122.67deg, #232323 32.5%, #2E2D2D 78.62%);
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+div.dex-user-badge div.dex-user-badge-titles {
+	display: flex;
+	flex-direction: column;
+}
+
+div.dex-user-badge span.dex-user-badge-stats a {
+	font-size: 12px;
+	text-decoration: none;
+	color: white;
+	font-weight: 300;
+}
+
+div.dex-user-badge div.dex-user-badge-picture img {
+	width: 45px;
+	border-radius: 10000px;
+	margin-right: 15px;
+}
