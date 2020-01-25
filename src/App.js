@@ -5,8 +5,17 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from './views/home';
 import Builder from './views/deck-builder';
 import CollectionLoader from './components/collection-loader';
+import Loader from './components/loader';
+
+import { useBlockstack } from './utils/useBlockstack';
 
 function App() {
+	const [ session, { login } ] = useBlockstack();
+	if(!session) {
+		login();
+		return <Loader/>;
+	}
+
 	return (
 		<BrowserRouter>
 			<Switch>
