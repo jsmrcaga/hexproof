@@ -3,6 +3,16 @@ div.dex-mana-cost {
 	flex-direction: row;
 }
 
+div.dex-single-mana-cost {
+	display: flex;
+}
+
+div.dex-mana-cost span {
+	margin-left: 5px;
+	margin-right: 0px;
+	color: #999;
+}
+
 div.dex-mana-cost img {
 	min-width: 20px;
 	max-width: 40px;

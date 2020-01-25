@@ -5,13 +5,14 @@ div.dex-card-search {
 }
 
 div.dex-card-image {
-	width: 170px;
+	width: 230px;
 	padding-right: 20px;
 	padding-bottom: 15px;
 	cursor: pointer;
 }
 
 div.dex-card-image img {
+	border-radius: 11px;
 	max-width: 100%;
 	transition: opacity 0.1s ease-in-out;
 }
@@ -20,4 +21,6 @@ div.dex-card-image img:hover {
 	opacity: 0.4;
 }
 
-
+div.dex-card-loader {
+	height: 325px;
+}

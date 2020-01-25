@@ -1,5 +1,6 @@
 div.dex-collection-card {
 	width: 300px;
+	min-width: 300px;
 	height: 175px;
 	margin-right: 25px;
 	margin-bottom: 25px;
@@ -37,4 +38,5 @@ div.dex-collection-card div.dex-collection-card-image {
 div.dex-collection-card div.dex-collection-card-image img {
 	width: 100%;
 	display: block;
+	opacity: 0.6;
 }

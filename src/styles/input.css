@@ -1,0 +1,16 @@
+div.dex-input input {
+	font-size: 18px;
+	background: rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+	border: none;
+	outline: none;
+	color: white;
+	min-width: 300px;
+	padding: 10px 20px;
+	border-bottom: 1px solid #676767;
+	font-family: 'Noto Sans';
+}
+
+div.dex-card-input input.danger {
+	color: #af3535;
+}

@@ -38,21 +38,29 @@ export function useBlockstack({ origin=window.location.origin, onSignInError=()=
 		return user_session.signUserOut();
 	}, [user_session, setSession]);
 
-	const putFile = React.useCallback((name, data) => {
+	const putFile = React.useCallback((name, data, params={}) => {
 		if(!user_session.isUserSignedIn()) {
 			return Promise.reject(new Error('Blockstack user not signed in'));
 		}
 
-		return user_session.putFile(name, data);
+		return user_session.putFile(name, data, params);
 	}, [user_session]);
 
-	const getFile = React.useCallback((name) => {
+	const getFile = React.useCallback((name, params={}) => {
 		if(!user_session.isUserSignedIn()) {
 			return Promise.reject(new Error('Blockstack user not signed in'));
 		}
 
-		return user_session.getFile(name);
+		return user_session.getFile(name, params);
 	}, [user_session]);
+
+	const deleteFile = React.useCallback((name, params={}) => {
+		if(!user_session.isUserSignedIn()) {
+			return Promise.reject(new Error('Blockstack user not signed in'));
+		}
+
+		return user_session.deleteFile(name, params);
+	});
 
 	if(!user_session.isUserSignedIn() && user_session.isSignInPending()) {
 		user_session.handlePendingSignIn().then(() => {
@@ -80,7 +88,7 @@ export function useBlockstack({ origin=window.location.origin, onSignInError=()=
 		setSession(user_data);
 	}
 
-	return [ session || tmpSession, { putFile, getFile, login, logout } ];
+	return [ session || tmpSession, { putFile, getFile, login, logout, deleteFile } ];
 };
 
 export default BlockstackContext;

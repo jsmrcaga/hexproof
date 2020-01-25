@@ -1,0 +1,12 @@
+div.recharts-default-tooltip {
+	background-color: black !important;
+}
+
+div.dex-stats-stats-section {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+div.dex-stat-section-title {
+	color: #999;
+}

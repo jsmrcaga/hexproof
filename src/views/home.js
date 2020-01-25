@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useBlockstack } from '../utils/useBlockstack';
 
+import { Input } from '../components/card-input';
 import Header from '../components/header';
 import CollectionCard from '../components/collection-card';
 import Loader from '../components/loader';
@@ -23,8 +24,8 @@ function NewCollection({ name, link, history }) {
 	);
 }
 
-function CardsContainer({ title, link, collections=[], history }) {
-	const cards = collections.map(collection => (
+function CardsContainer({ title, link, collections=[], history, onChange=()=>{} }) {
+	const cards = collections.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)).map(collection => (
 		<CollectionCard
 			key={collection.id}
 			name={collection.name}
@@ -32,6 +33,7 @@ function CardsContainer({ title, link, collections=[], history }) {
 			format={collection.format}
 			cards={collection.card_count}
 			entity={collection.entity}
+			onClick={() => history.push(`${link}/${collection.id}`)}
 		/>
 	));
 
@@ -41,12 +43,17 @@ function CardsContainer({ title, link, collections=[], history }) {
 				<span className="dex-collection-section-name">
 					{`${title} /`}
 				</span>
-				<span className="dex-collection-view-all" onClick={() => history.push(link)}>View All</span>
+				<Input
+					debounce={false}
+					placeholder="Filter..."
+					onChange={onChange}
+					className="dex-collection-filter"
+				/>
 				{collections.length ? <span className="dex-collection-section-count">{collections.length} {title}</span> : null}
 			</div>
 			<div className="dex-collection-section-content">
-				{cards}
 				<NewCollection name={title} link={link} history={history}/>
+				{cards}
 			</div>
 		</div>
 	);
@@ -55,9 +62,30 @@ function CardsContainer({ title, link, collections=[], history }) {
 export default function Home({ history }) {
 	const FILENAME = 'dex-collections.json';
 	const [ loading, setLoading ] = React.useState(true);
-	const [ collections, setCollections ] = React.useState(null);
+	const [ collections, setCollections ] = React.useState({ decks: [], collections: [] });
+	const [ decks, setDecks ] = React.useState([]);
+	const [ cols, setCols ] = React.useState([]);
 
 	const [ session, { getFile, putFile }] = useBlockstack();
+
+	const filter = (what=[], value='') => {
+		if(!value || value === '') {
+			return what;
+		}
+
+		return what.filter(deck => {
+			let reg = new RegExp(value, 'gi');
+			return reg.test(deck.name);
+		});
+	};
+
+	const filterDecks = React.useCallback(value => {
+		return setDecks(filter(collections.decks, value));
+	}, [ collections ]);
+
+	const filterCollections = React.useCallback(value => {
+		return setCols(filter(collections.collections, value));
+	}, [ collections ]);
 
 	React.useEffect(() => {
 		getFile(FILENAME).then(json => {
@@ -66,20 +94,27 @@ export default function Home({ history }) {
 
 			if(!collections) {
 				// First time
+				let main_uuid = Utils.UUID();
 				collections = {
 					decks: [],
 					collections: [{
 						name: 'Main Collection',
 						cards: 0,
-						id: Utils.UUID(),
+						id: main_uuid,
 						image: MagicLogo
 					}]
 				};
 
 				putFile(FILENAME, JSON.stringify(collections));
+				putFile(main_uuid, JSON.stringify({
+					...collections.collections[0],
+					cards: []
+				}));
 			}
 
 			setCollections(collections);
+			setDecks(collections.decks);
+			setCols(collections.collections);
 		}).catch(e => {
 			// Show notification ?
 		});
@@ -91,19 +126,21 @@ export default function Home({ history }) {
 
 	return (
 		<React.Fragment>
-			<Header name="Dex" history={history}/>
+			<Header name="Dex" history={history} decks={decks.length} collections={cols.length}/>
 			<div className="dex-container">
 				<CardsContainer	
 					title="Decks"
 					link="/decks"
-					collections={collections ? collections.decks : []}
+					collections={decks}
 					history={history}
+					onChange={filterDecks}
 				/>
 				<CardsContainer	
 					title="Collections"
 					link="/collections"
-					collections={collections ? collections.collections : []}
+					collections={cols}
 					history={history}
+					onChange={filterCollections}
 				/>
 			</div>
 		</React.Fragment>

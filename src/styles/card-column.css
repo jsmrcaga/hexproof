@@ -1,0 +1,26 @@
+div.dex-type-count, div.dex-type-count-count {
+	display: flex;
+	align-items: center;
+}
+
+div.dex-type-count {
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+div.dex-type-count-count img {
+	max-width: 15px;
+	min-width: 15px;
+}
+
+div.dex-type-count-count span {
+	margin-left: 8px;
+	font-size: 16px;
+}
+
+div.dex-card-column > input {
+	padding-left: 0px;
+	margin-bottom: 15px;
+	border-bottom: 1px #676767 solid;
+}
+

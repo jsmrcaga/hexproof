@@ -3,9 +3,9 @@ import ManaCost from './mana-cost';
 
 import '../styles/collection-card.css';
 
-export default function CollectionCard({ name, image=null, format=null, cards=0, entity=null }) {
+export default function CollectionCard({ name, image=null, format=null, cards=0, entity=null, onClick=()=>{} }) {
 	return (
-		<div className="dex-collection-card">
+		<div className="dex-collection-card" onClick={onClick}>
 			{
 				image &&
 				<div className="dex-collection-card-image">

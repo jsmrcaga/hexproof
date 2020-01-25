@@ -11,3 +11,49 @@
 .animation-spin {
 	animation: spin 1s infinite;
 }
+
+@keyframes load {
+	0% {
+		opacity: 0.2;
+	}
+
+	50% {
+		opacity: 0.5;
+	}
+
+	100% {
+		opacity: 0.2;
+	}
+}
+
+.animation-load {
+	background: linear-gradient(#676767, #999);
+	animation: load 1s infinite ease-in-out;
+}
+
+@keyframes danger {
+	4% {
+		transform: rotate(20deg);
+	}
+
+	12% {
+		transform: rotate(-20deg);
+	}
+
+	20% {
+		transform: rotate(15deg);
+	}
+
+	28% {
+		transform: rotate(-15deg);
+	}
+
+	8%, 16%, 24%, 30%, 100% {
+		transform: rotate(0deg);
+	}
+}
+
+.animation-danger {
+	animation: danger 1.5s infinite ease-in-out;
+	animation-delay: 1s;
+}

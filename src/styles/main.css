@@ -24,11 +24,13 @@ div.dex-collection-section {
 div.dex-collection-section div.dex-collection-section-content {
 	display: flex;
 	padding-top: 20px;
+	flex-wrap: wrap;
 }
 
 div.dex-collection-section div.dex-collection-section-title {
 	display: flex;
 	width: 100%;
+	align-items: center;
 }
 
 div.dex-collection-section span.dex-collection-view-all {
@@ -78,4 +80,8 @@ div.dex-user-badge div.dex-user-badge-picture img {
 	width: 45px;
 	border-radius: 10000px;
 	margin-right: 15px;
+}
+
+span.dex-builder-title {
+	color: #999;
 }

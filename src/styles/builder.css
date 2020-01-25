@@ -18,7 +18,7 @@ div.dex-builder-filters-container div.dex-builder-buttons {
 	margin-left: auto;
 }
 
-div.dex-builder-filters-container div.dex-dropdown {
+div.dex-builder-filters-container div.dex-dropdown:last-child {
 	margin-left: 10px;
 }
 
@@ -41,15 +41,44 @@ div.dex-builder-buttons div.dex-builder-button img:hover {
 /* Card columns */
 div.dex-builder-columns {
 	display: flex;
+    position: sticky;
+    top: 15px;
+    align-self: flex-start;
+    min-height: calc(100vh - 30px);
 }
 
 div.dex-card-column {
 	max-width: 400px;
 	width: 400px;
+	margin-right: 50px;
+	position: relative;
+	padding: 15px;
 }
 
 div.dex-droppable-card {
-	padding-right: 50px;
+	height: 100%;
+}
+
+div.dex-droppable-card div.dex-drop-here {
+	border-radius: 5px;
+	background: rgba(0, 0, 0, 0.2);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+div.dex-droppable-card div.dex-drop-here img {
+	display: block;
+	margin: 0 auto;
+	margin-top: 50%;
+	max-width: 200px;
+}
+
+div.dex-droppable-card div.dex-drop-here.active {
+	display: block;
 }
 
 div.dex-droppable-card:last-child {
@@ -80,3 +109,25 @@ div.dex-builder-content {
 	display: flex;
 }
 
+div.dex-left-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+div.dex-dropdown-filters {
+	display: flex;
+}
+
+div.dex-mana-filter, div.dex-dropdown-filters, div.dex-builder-buttons {
+	margin-bottom: 10px;
+}
+
+div.dex-scryfall-query {
+	margin-bottom: 10px;
+}
+
+div.dex-column {
+	max-height: calc(100vh - 270px);
+	overflow: scroll;
+}

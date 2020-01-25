@@ -1,0 +1,13 @@
+input.dex-title-edit {
+	background: none;
+	border: none;
+	font-family: 'Noto Sans';
+	font-size: 18px;
+	color: #999;
+	outline: none;
+	border-bottom: 1px solid #676767;
+}
+
+div.dex-title-edit.editable {
+	cursor: pointer;
+}

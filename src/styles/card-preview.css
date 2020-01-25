@@ -1,0 +1,8 @@
+div.dex-card-preview {
+	position: fixed;
+}
+
+div.dex-card-preview img {
+	border-radius: 11px;
+	max-width: 250px;
+}
