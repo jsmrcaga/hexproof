@@ -1,0 +1,27 @@
+div.scryfall-banner {
+	position: fixed;
+	bottom: 15px;
+	right: 15px;
+}
+
+div.scryfall-banner a {
+	display: flex;
+	align-items: center;
+}
+
+div.scryfall-banner img {
+	max-height: 50px;
+}
+
+div.scryfall-banner span {
+	max-width: 100px;
+	font-size: 10px;
+	color: #999;
+	padding-left: 10px;
+}
+
+@media only screen and (max-width: 900px) {
+	div.scryfall-banner span {
+		display: none;
+	}
+}

@@ -85,3 +85,21 @@ div.dex-user-badge div.dex-user-badge-picture img {
 span.dex-builder-title {
 	color: #999;
 }
+
+@media only screen and (max-width: 900px) {
+	body {
+		padding: 15px;
+	}
+
+	div.dex-user-badge {
+		min-width: 0px;
+	}
+
+	div.dex-user-badge div.dex-user-badge-picture img {
+		margin: 0;
+	}
+
+	div.dex-user-badge div.dex-user-badge-titles {
+		display: none;
+	}
+}

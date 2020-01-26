@@ -73,22 +73,22 @@ function ActionButtons({ needsSaving=false, deleteDisabled=false, onImport=()=>{
 
 	return (
 		<div className="dex-builder-buttons">
-			<div className="dex-builder-button">
+			<div className="dex-builder-button full-screen">
 				<img src={IconFullscreen} onClick={onFullscreen}/>
 			</div>
-			<div className="dex-builder-button">
+			<div className="dex-builder-button save">
 				<LoadingImage className={needsSaving ? 'animation-danger' : ''} icon={IconSave} loading={saveLoading} onClick={save}/>
 			</div>
-			<div className="dex-builder-button">
+			<div className="dex-builder-button stats">
 				<img src={IconStats} onClick={onStats}/>
 			</div>
-			<div className="dex-builder-button">
+			<div className="dex-builder-button import">
 				<img src={IconImport} onClick={onImport}/>
 			</div>
-			<div className="dex-builder-button">
+			<div className="dex-builder-button export">
 				<img src={IconExport} onClick={onExport}/>
 			</div>
-			<div className="dex-builder-button">
+			<div className="dex-builder-button delete">
 				<LoadingImage icon={IconDelete} loading={deleteLoading} onClick={_delete}/>
 			</div>
 		</div>
@@ -97,7 +97,7 @@ function ActionButtons({ needsSaving=false, deleteDisabled=false, onImport=()=>{
 
 // Duplicate logic beacause its simpler on the columns
 
-function DeckBuilder({ deck=null, showingStats=false, filters: { query, mana } = {}, onChange=()=>{}, fullscreen=false}) {
+function DeckBuilder({ deck=null, showingStats=false, filters: { query, mana } = {}, onChange=()=>{}, fullscreen=false, isMobile=false}) {
 	const [ main, setMain ] = React.useState(deck ? deck.main : []);
 	const [ sideboard, setSideboard ] = React.useState(deck ? deck.sideboard : []);
 
@@ -132,7 +132,7 @@ function DeckBuilder({ deck=null, showingStats=false, filters: { query, mana } =
 					showingStats && <CardStats cards={main}/>
 				}
 				{
-					!showingStats && <CardSearch onCardClicked={addCard} query={query} mana={mana}/>
+					!showingStats && !isMobile && <CardSearch onCardClicked={addCard} query={query} mana={mana}/>
 				}
 			</div>
 			{
@@ -146,7 +146,7 @@ function DeckBuilder({ deck=null, showingStats=false, filters: { query, mana } =
 	);
 }
 
-function CollectionBuilder({ collection=null, showingStats=false, filters: { query, mana } = {}, onChange=()=>{}, fullscreen=false}) {
+function CollectionBuilder({ collection=null, showingStats=false, filters: { query, mana } = {}, onChange=()=>{}, fullscreen=false, isMobile=false}) {
 	const [ cards, setCards ] = React.useState(collection ? collection.cards : []);
 
 	const set_cards = React.useCallback(cards => {
@@ -175,7 +175,7 @@ function CollectionBuilder({ collection=null, showingStats=false, filters: { que
 					showingStats && <CardStats cards={cards}/>
 				}
 				{
-					!showingStats && <CardSearch onCardClicked={addCard} query={query} mana={mana}/>
+					!showingStats && !isMobile && <CardSearch onCardClicked={addCard} query={query} mana={mana}/>
 				}
 			</div>
 			{
@@ -353,6 +353,7 @@ export default function Builder({ type='deck', collection=null, history }) {
 						filters={filters}
 						onChange={updateDeck}
 						fullscreen={fullscreen}
+						isMobile={window.innerWidth <= 900}
 					/>
 				</div>
 			</div>

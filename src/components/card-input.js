@@ -3,6 +3,7 @@ import React from 'react';
 import Scryfall from '../api/scryfall';
 import ManaCost from './mana-cost';
 import CardPreview from './card-preview';
+import LongPress from './long-press';
 
 import '../styles/inputs.css';
 
@@ -103,14 +104,16 @@ export default function CardInput({ card=null, onCardFound=()=>{}, onCardError=(
 		}
 
 		return onCardRemoved(card);
-	}, [onCardRemoved])
+	}, [onCardRemoved]);
 
 	if(card) {
 		return (
-			<div className="dex-card-input" onClick={remove} onMouseOver={() => !preview && showPreview(true)} onMouseLeave={() => preview && showPreview(false)}>
-				{preview && <CardPreview card={card}/>}
-				<CardItem quantity={card.qtty} card={card} onQttyUpdated={onQttyUpdated}/>
-			</div>
+			<LongPress onLongPress={() => onCardRemoved(card)}>
+				<div className="dex-card-input" onClick={remove} onMouseOver={() => !preview && showPreview(true)} onMouseLeave={() => preview && showPreview(false)}>
+					{preview && <CardPreview card={card}/>}
+					<CardItem quantity={card.qtty} card={card} onQttyUpdated={onQttyUpdated}/>
+				</div>
+			</LongPress>
 		);
 	}
 

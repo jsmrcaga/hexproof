@@ -29,6 +29,10 @@ div.dex-builder-buttons div.dex-builder-button {
 	cursor: pointer;
 }
 
+div.dex-builder-buttons div.dex-builder-button:first-child {
+	margin-left: 0;
+}
+
 div.dex-builder-buttons div.dex-builder-button img {
 	max-width: 100%;
 	transition: opacity 0.15s ease-in-out;
@@ -130,4 +134,40 @@ div.dex-scryfall-query {
 div.dex-column {
 	max-height: calc(100vh - 270px);
 	overflow: scroll;
+}
+
+@media only screen and (max-width: 900px) {
+	div.dex-builder-filters-container {
+		margin-bottom: 0;
+	}
+
+	div.dex-builder-filters-container div.dex-builder-filters {
+		flex-wrap: wrap-reverse;
+		justify-content: center;
+	}
+
+	div.dex-builder-filters-container div.dex-builder-buttons {
+		margin-left: 0;
+	}
+
+	div.dex-left-filters {
+		display: none;
+	}
+
+	div.dex-scryfall-query {
+		display: none;
+	}
+
+	div.dex-builder-columns {
+		width: 100%;
+	}
+
+	div.dex-builder-columns div.dex-card-column {
+		width: 100%;
+		margin-right: 0;
+	}
+
+	div.dex-builder-buttons div.dex-builder-button.full-screen {
+		display: none;
+	}
 }

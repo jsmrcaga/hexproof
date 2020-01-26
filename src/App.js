@@ -6,6 +6,7 @@ import Home from './views/home';
 import Builder from './views/deck-builder';
 import CollectionLoader from './components/collection-loader';
 import Loader from './components/loader';
+import ScryfallBanner from './components/scryfall-banner';
 
 import { useBlockstack } from './utils/useBlockstack';
 
@@ -61,6 +62,7 @@ function App() {
 					)}
 				/>
 			</Switch>
+			<ScryfallBanner/>
 		</BrowserRouter>
 	);
 }
