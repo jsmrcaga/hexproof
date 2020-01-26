@@ -13,6 +13,11 @@ inputs:
     required: true
     default: ''
 
+  NETLIFY_DEPLOY_MESSAGE:
+    description: 'A deploy message'
+    required: false
+    default: ''
+
   build_directory:
     description: 'Directory where built files are stored'
     required: true
@@ -29,6 +34,7 @@ runs:
   args:
     - ${{ inputs.NETLIFY_AUTH_TOKEN }}
     - ${{ inputs.NETLIFY_SITE_ID }}
+    - ${{ inputs.NETLIFY_DEPLOY_TO_PROD }}
     - ${{ inputs.build_directory }}
     - ${{ inputs.functions_directory }}
 
