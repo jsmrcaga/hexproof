@@ -1,0 +1,23 @@
+name: 'Netlify Deploy'
+
+on:
+  release:
+    types: ['published']
+
+jobs:
+  deploy:
+    name: 'Deploy'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: 'Npm install'
+        run: npm i -g netlify-cli
+      - name: 'Build'
+        run: npm run build
+        env:
+          NODE_ENV: production
+      - name: 'Deploy'
+        run: netlify deploy --dir=build
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
