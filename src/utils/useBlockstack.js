@@ -30,6 +30,10 @@ export function useBlockstack({ origin=window.location.origin, onSignInError=()=
 	const { session, setSession } = context;
 	
 	const login = React.useCallback(() => {
+		if(!user_session.isUserSignedIn() && user_session.isSignInPending()) {
+			return;
+		}
+
 		return user_session.redirectToSignIn(origin);
 	}, [user_session, origin]);
 
