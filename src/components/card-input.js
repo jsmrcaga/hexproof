@@ -2,7 +2,7 @@ import React from 'react';
 
 import Scryfall from '../api/scryfall';
 import ManaCost from './mana-cost';
-import CardPreview from './card-preview';
+import { Preview } from './card-preview';
 import LongPress from './long-press';
 
 import '../styles/inputs.css';
@@ -36,7 +36,7 @@ export function Input({ value=null, onChangeImmediate=()=>{}, onChange=()=>{}, d
 		}
 
 		return onChange(value, event);
-	}, [ onChange ]);
+	}, [ onChange, debounce, onChangeImmediate ]);
 
 	return (
 		<input
@@ -54,7 +54,7 @@ export function Input({ value=null, onChangeImmediate=()=>{}, onChange=()=>{}, d
 export function CardItem({ card=null, onQttyUpdated=()=>{}, danger=false }) {
 	const updateQtty = React.useCallback(({ target: { value }}) => {
 		onQttyUpdated(card, +value);
-	}, [ onQttyUpdated ]);
+	}, [ onQttyUpdated, card ]);
 
 	return (
 		<React.Fragment>
@@ -66,8 +66,6 @@ export function CardItem({ card=null, onQttyUpdated=()=>{}, danger=false }) {
 }
 
 export default function CardInput({ card=null, onCardFound=()=>{}, onCardError=()=>{}, onQttyUpdated=()=>{}, onError=()=>{}, onCardRemoved=()=>{} }) {
-	const [ error, setError ] = React.useState(null);
-	const [ preview, showPreview ] = React.useState(false);
 	const [ value, setValue ] = React.useState('');
 
 	const searchCard = React.useCallback((value, event) => {
@@ -96,7 +94,7 @@ export default function CardInput({ card=null, onCardFound=()=>{}, onCardError=(
 		const { target: { value }} = event;
 
 		return searchCard(value, event);
-	});
+	}, [searchCard]);
 
 	const remove = React.useCallback((event) => {
 		if(!(event.ctrlKey || event.metaKey) || !card) {
@@ -104,15 +102,16 @@ export default function CardInput({ card=null, onCardFound=()=>{}, onCardError=(
 		}
 
 		return onCardRemoved(card);
-	}, [onCardRemoved]);
+	}, [onCardRemoved, card]);
 
 	if(card) {
 		return (
 			<LongPress onLongPress={() => onCardRemoved(card)}>
-				<div className="dex-card-input" onClick={remove} onMouseOver={() => !preview && showPreview(true)} onMouseLeave={() => preview && showPreview(false)}>
-					{preview && <CardPreview card={card}/>}
-					<CardItem quantity={card.qtty} card={card} onQttyUpdated={onQttyUpdated}/>
-				</div>
+				<Preview card={card}>
+					<div className="dex-card-input" onClick={remove}>
+						<CardItem quantity={card.qtty} card={card} onQttyUpdated={onQttyUpdated}/>
+					</div>
+				</Preview>
 			</LongPress>
 		);
 	}

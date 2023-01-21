@@ -14,7 +14,7 @@ export default function InfinityScroller({ children, className='', onEnd }) {
 
 			debounce.current = setTimeout(() => {
 				return onEnd();
-			}, 100);
+			}, 500);
 		}
 	}, [ scrollerRef, onEnd, offset ]);
 

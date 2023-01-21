@@ -7,14 +7,14 @@ class RequestError extends Error {
 	}
 
 	toString() {
-		let { message, url, status, response } = this;
+		let { message, status, response } = this;
 		return `[RequestError] ${message} (${status})\n${response}`;
 	}
 }
 
 const QueryString = {
 	stringify: (query={}) => {
-		return Object.entries(query).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+		return Object.entries(query).map(([k, v]) => v ? `${encodeURIComponent(k)}=${encodeURIComponent(v)}` : '').join('&');
 	},
 	parse: query => {
 

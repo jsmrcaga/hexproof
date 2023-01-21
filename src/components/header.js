@@ -4,13 +4,13 @@ import UserBadge from './user-badge';
 
 import '../styles/header.css';
 
-export default function Header({ decks=0, collections=0, editable=false, children, title="Dex", history, onChange=()=>{} }) {
+export default function Header({ decks=0, collections=0, editable=false, children, title="Hexproof", history, onChange=()=>{} }) {
 	const [ editing, setEditing ] = React.useState(false);
 	const [ _title, setTitle ] = React.useState(title);
 
 	const change = React.useCallback(({ target: { value }}) => {
 		setTitle(value);
-	}, [ onChange ]);
+	}, []);
 
 	const apply = React.useCallback(({ type, keyCode }) => {
 		if(type === 'keyup' && keyCode !== 13) {

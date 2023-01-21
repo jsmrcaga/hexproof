@@ -1,8 +1,9 @@
 div.dex-card-preview {
+	z-index: 10;
 	position: fixed;
 }
 
 div.dex-card-preview img {
 	border-radius: 11px;
-	max-width: 250px;
+	width: 400px;
 }

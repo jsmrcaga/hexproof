@@ -16,24 +16,24 @@ function Dropdown({ options, placeholder='Select an option', onChange=()=>{} }) 
 	const [ open, setOpen ] = React.useState(false);
 	const [ value, setValue ] = React.useState(false);
 
-	const windowClick = (event) => {
-		if(open && (!ref.current.contains(event.target) || event.target === document.body)) {
-			setOpen(false);
-		}
-	};
-
 	// window listener
 	React.useEffect(() => {
+		const windowClick = (event) => {
+			if(open && (!ref.current.contains(event.target) || event.target === document.body)) {
+				setOpen(false);
+			}
+		};
+
 		window.addEventListener('click', windowClick);
 
 		return () => window.removeEventListener('click', windowClick);
-	}, [])
+	}, [open]);
 
 	const setOption = React.useCallback(option => {
 		setValue(option);
 		setOpen(false);
 		onChange(option);
-	});
+	}, [onChange]);
 
 	const groups = Array.from(new Set(options.map(option => option.group).filter(e => e)));
 
@@ -63,7 +63,7 @@ function Dropdown({ options, placeholder='Select an option', onChange=()=>{} }) 
 				<span className={`dex-dropdown-value-value ${value ? '' : 'placeholder'}`}>{value ? value.label : placeholder}</span>
 			</div>
 			<div className="dex-dropdown-dropper" onClick={() => setOpen(!open)}>
-				<img src={ArrowDropdown}/>
+				<img alt="chevron" src={ArrowDropdown}/>
 			</div>
 			<div className={`dex-dropdown-dropdown ${open ? 'open' : ''}`}>
 				{ actions }
@@ -91,22 +91,22 @@ export function ManaFilter({ onChange=()=>{} }) {
 	return (
 		<div className="dex-mana-filter">
 			<div className="dex-mana-mana">
-				<img className={currentFilter.includes('R') ? 'active' : ''}src={ManaRed} onClick={() => filter('R')}/>
+				<img alt="Red mana" className={currentFilter.includes('R') ? 'active' : ''}src={ManaRed} onClick={() => filter('R')}/>
 			</div>
 			<div className="dex-mana-mana">
-				<img className={currentFilter.includes('W') ? 'active' : ''}src={ManaWhite} onClick={() => filter('W')}/>
+				<img alt="White mana" className={currentFilter.includes('W') ? 'active' : ''}src={ManaWhite} onClick={() => filter('W')}/>
 			</div>
 			<div className="dex-mana-mana">
-				<img className={currentFilter.includes('B') ? 'active' : ''}src={ManaBlack} onClick={() => filter('B')}/>
+				<img alt="Black mana" className={currentFilter.includes('B') ? 'active' : ''}src={ManaBlack} onClick={() => filter('B')}/>
 			</div>
 			<div className="dex-mana-mana">
-				<img className={currentFilter.includes('U') ? 'active' : ''}src={ManaBlue} onClick={() => filter('U')}/>
+				<img alt="Blue mana" className={currentFilter.includes('U') ? 'active' : ''}src={ManaBlue} onClick={() => filter('U')}/>
 			</div>
 			<div className="dex-mana-mana">
-				<img className={currentFilter.includes('G') ? 'active' : ''}src={ManaGreen} onClick={() => filter('G')}/>
+				<img alt="Green mana" className={currentFilter.includes('G') ? 'active' : ''}src={ManaGreen} onClick={() => filter('G')}/>
 			</div>
 			<div className="dex-mana-mana">
-				<img className={currentFilter.includes('C') ? 'active' : ''}src={ManaColorless} onClick={() => filter('C')}/>
+				<img alt="Colorless mana" className={currentFilter.includes('C') ? 'active' : ''}src={ManaColorless} onClick={() => filter('C')}/>
 			</div>
 		</div>
 	);

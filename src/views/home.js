@@ -1,21 +1,17 @@
 import React from 'react';
 
-import { useBlockstack } from '../utils/useBlockstack';
-
 import { Input } from '../components/card-input';
 import Header from '../components/header';
 import CollectionCard from '../components/collection-card';
-import Loader from '../components/loader';
 
-import MagicLogo from '../images/magic-logo.png'
+import { useInitLibrary } from '../hooks/useCollection';
 
-import Utils from '../utils/utils';
 
 function NewCollection({ name, link, history }) {
 	return (
 		<div className="dex-collection-card" onClick={() => history.push(`${link}/new`)}>
-			<div>
-				<img src=""/>
+			<div className="dex-collection-card-image">
+				<img alt="Hexproof logo" src="/hexproof.png"/>
 			</div>
 			<span>
 				{`New ${name.slice(0, name.length - 1)}`}
@@ -59,88 +55,51 @@ function CardsContainer({ title, link, collections=[], history, onChange=()=>{} 
 	);
 }
 
-export default function Home({ history }) {
-	const FILENAME = 'dex-collections.json';
-	const [ loading, setLoading ] = React.useState(true);
-	const [ collections, setCollections ] = React.useState({ decks: [], collections: [] });
-	const [ decks, setDecks ] = React.useState([]);
-	const [ cols, setCols ] = React.useState([]);
-
-	const [ session, { getFile, putFile }] = useBlockstack();
-
-	const filter = (what=[], value='') => {
-		if(!value || value === '') {
-			return what;
-		}
-
-		return what.filter(deck => {
-			let reg = new RegExp(value, 'gi');
-			return reg.test(deck.name);
-		});
-	};
-
-	const filterDecks = React.useCallback(value => {
-		return setDecks(filter(collections.decks, value));
-	}, [ collections ]);
-
-	const filterCollections = React.useCallback(value => {
-		return setCols(filter(collections.collections, value));
-	}, [ collections ]);
-
-	React.useEffect(() => {
-		getFile(FILENAME).then(json => {
-			let collections = JSON.parse(json);
-			setLoading(false);
-
-			if(!collections) {
-				// First time
-				let main_uuid = Utils.UUID();
-				collections = {
-					decks: [],
-					collections: [{
-						name: 'Main Collection',
-						cards: 0,
-						id: main_uuid,
-						image: MagicLogo
-					}]
-				};
-
-				putFile(FILENAME, JSON.stringify(collections));
-				putFile(main_uuid, JSON.stringify({
-					...collections.collections[0],
-					cards: []
-				}));
-			}
-
-			setCollections(collections);
-			setDecks(collections.decks);
-			setCols(collections.collections);
-		}).catch(e => {
-			// Show notification ?
-		});
-	}, []);
-
-	if(loading) {
-		return <Loader/>
+const filter = (what=[], value='') => {
+	if(!value || value === '') {
+		return what;
 	}
+
+	return what.filter(({ name }) => {
+		let reg = new RegExp(value, 'gi');
+		return reg.test(name);
+	});
+};
+
+export default function Home({ history }) {
+	const [ library, setLibrary ] = React.useState({ decks: [], collections: [] });
+	const [ deckFilter, setDeckFilter ] = React.useState(null);
+	const [ collectionsFilter, setCollectionFilter ] = React.useState(null);
+
+	useInitLibrary(library => {
+		setLibrary(library);
+	});
+
+	const filteredDecks = React.useMemo(() => {
+		return filter(Object.values(library.decks), deckFilter);
+	}, [ library, deckFilter ]);
+
+	const filteredCollections = React.useMemo(() => {
+		return filter(Object.values(library.collections), collectionsFilter);
+	}, [ library, collectionsFilter ]);
 
 	return (
 		<React.Fragment>
-			<Header name="Dex" history={history} decks={decks.length} collections={cols.length}/>
+			<Header name="Hexproof" history={history} decks={library?.decks.length} collections={library?.collections.length}/>
 			<div className="dex-container">
 				<CardsContainer	
 					title="Decks"
 					link="/decks"
-					collections={decks}
+					collections={filteredDecks}
 					history={history}
-					onChange={filterDecks}
+					onChange={value => setDeckFilter(value)}
 				/>
 				<CardsContainer	
 					title="Collections"
 					link="/collections"
-					collections={cols}
+					collections={filteredCollections}
 					history={history}
-					onChange={filterCollections}
+					onChange={value => setCollectionFilter(value)}
 				/>
 			</div>
 		</React.Fragment>

@@ -40,7 +40,7 @@ export default function Input({ value=null, placeholder='Scryfall query', onChan
 
 		onChange(value);
 		return onQueryChange({ colors, sets, formats }); 
-	}, [ onChange, onQueryChange ]);
+	}, [ onChange, onQueryChange, debounce ]);
 
 	const enter = React.useCallback(({ keyCode, target: { value }}) => {
 		if(keyCode !== 13) {

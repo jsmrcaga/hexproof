@@ -30,7 +30,7 @@ function DroppableCard({ children, onCardDropped=()=>{} }) {
 	return (
 		<div className="dex-droppable-card" onDragOver={dragOver} onDrop={drop}>
 			<div className={`dex-drop-here ${overlay ? 'active' : ''}`} onDragLeave={dragOut} onDrop={dragOut}>
-				<img src={IconExport}/>
+				<img alt="Export" src={IconExport}/>
 			</div>
 			{ children }
 		</div>
@@ -89,7 +89,7 @@ export default function CardColumn({ filter=false, types=false, title='', showCa
 	// Filter new cards
 	React.useEffect(() => {
 		_filter();
-	}, [ cards ]);
+	}, [ _filter ]);
 
 	const addCard = React.useCallback((card, qtty=false) => {
 		let newCards = [...cards];
@@ -111,7 +111,7 @@ export default function CardColumn({ filter=false, types=false, title='', showCa
 			return; //wtf?
 		}
 
-		let [deleted_card] = newCards.splice(index, 1);
+		newCards.splice(index, 1);
 		card.qtty = 0;
 		setCards(newCards);
 	}, [ cards, setCards ])
@@ -125,7 +125,7 @@ export default function CardColumn({ filter=false, types=false, title='', showCa
 
 		exists.qtty = qtty;
 		setCards(newCards);
-	}, [ cards ]);
+	}, [ cards, setCards ]);
 
 	const cardDropped = React.useCallback((card, event) => {
 		let qtty = false;

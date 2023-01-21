@@ -9,7 +9,7 @@ export default function CollectionCard({ name, image=null, format=null, cards=0,
 			{
 				image &&
 				<div className="dex-collection-card-image">
-					<img src={image}/>
+					<img alt={name} src={image}/>
 				</div>
 			}
 			<div className="dex-collection-card-mana-cost">

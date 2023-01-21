@@ -2,6 +2,7 @@ import React from 'react';
 
 import Scryfall from '../api/scryfall';
 import InfinityScroller from './infinity-scroll';
+import { Preview } from './card-preview';
 
 import '../styles/card-search.css';
 
@@ -41,7 +42,7 @@ function Card({ card, onClick=()=>{} }) {
 }
 
 export default function CardSearch({ onCardClicked=()=>{}, query=DEFAULT_FILTER, mana }) {
-	const [ page, setPage ] = React.useState(1);
+	const page = React.useRef(1);
 	const [ allCards, setAllCards ] = React.useState();
 	const [ currentCards, setCards ] = React.useState([]);
 	const [ loading, setLoading ] = React.useState(true);
@@ -63,19 +64,26 @@ export default function CardSearch({ onCardClicked=()=>{}, query=DEFAULT_FILTER,
 	}, [ mana ]);
 
 	const search = React.useCallback((add=false) => {
-		let currentPage = add ? page : 1;
+		let currentPage = add ? page.current : 1;
 		setLoading(true);
 		Scryfall.query(query, { page: currentPage }).then(cards => {
-			let newCards = add ? [...currentCards, ...cards] : cards;
-			setAllCards(newCards);
-			filter(newCards);
-			add ? setPage(page + 1) : undefined; // eslint-disable-line no-unused-expressions
+			setAllCards(currentCards => {
+				const newCards = add ? [...currentCards, ...cards] : cards;
+				filter(newCards);
+				return newCards;
+			});
+
+			if(add) {
+				page.current++;
+			}
+
 		}).catch(e => {
 			console.error(e);
+
 		}).finally(() => {
 			setLoading(false);
 		});
-	}, [ query, page ]);
+	}, [ query, page, filter ]);
 
 	const addSearch = React.useCallback(() => {
 		return search(true);
@@ -85,16 +93,22 @@ export default function CardSearch({ onCardClicked=()=>{}, query=DEFAULT_FILTER,
 		setAllCards([]);
 		setCards([]);
 		search();
-	}, [query]);
+	}, [search]);
 
 	React.useEffect(() => {
 		if(!allCards) {
 			return;
 		}
 		filter(allCards);
-	}, [ mana ]);
+	}, [ mana, allCards, filter ]);
 
-	let images = currentCards.map(card => <Card key={card.id} card={card} onClick={onCardClicked}/>);
+	let images = currentCards.map(card => {
+		return (
+			<Preview card={card}>
+				<Card key={card.id} card={card} onClick={onCardClicked}/>
+			</Preview>
+		);
+	});
 
 	return (
 		<InfinityScroller onEnd={addSearch}>

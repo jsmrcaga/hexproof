@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { useBlockstack } from '../utils/useBlockstack';
 import Utils from '../utils/utils';
+import { useHistory } from 'react-router-dom';
 
 import CardsColumn from '../components/card-column';
-import { ManaFilter, FormatDropDown, SetDropdown } from '../components/filters';
+import { ManaFilter } from '../components/filters';
 
 import Header from '../components/header';
 import CardSearch from '../components/card-search';
@@ -19,9 +19,11 @@ import IconSave from '../images/icon-save.svg';
 import IconDelete from '../images/icon-delete.svg';
 import IconFullscreen from '../images/icon-fullscreen.svg';
 
+import { useLibrary, Deck, Collection } from '../hooks/useCollection';
+
 import '../styles/builder.css';
 
-function LoadingImage({ className='', loading=false, icon, onClick=()=>{} }) {
+function LoadingImage({ className='', loading=false, icon, onClick=()=>{}, alt='' }) {
 	let saveClassname = className;
 
 	// exclusive
@@ -29,7 +31,7 @@ function LoadingImage({ className='', loading=false, icon, onClick=()=>{} }) {
 		saveClassname = `animation-spin`;
 	}
 
-	return <img className={saveClassname} src={loading ? IconRefresh : icon} onClick={onClick}/>
+	return <img alt={alt} className={saveClassname} src={loading ? IconRefresh : icon} onClick={onClick}/>
 }
 
 function ActionButtons({ needsSaving=false, deleteDisabled=false, onImport=()=>{}, onExport=()=>{}, onStats=()=>{}, onSave=()=>Promise.resolve(), onDelete=()=>{}, onFullscreen=()=>{} }) {
@@ -50,7 +52,7 @@ function ActionButtons({ needsSaving=false, deleteDisabled=false, onImport=()=>{
 		promise.finally(() => {
 			setSaveLoading(false);
 		});
-	}, [ onSave ]);
+	}, [ onSave, saveLoading ]);
 
 	const _delete = React.useCallback(() => {
 		if(deleteDisabled || deleteLoading) {
@@ -67,29 +69,27 @@ function ActionButtons({ needsSaving=false, deleteDisabled=false, onImport=()=>{
 		promise.finally(() => {
 			setDeleteLoading(false);
 		});
-	}, [ onDelete, deleteDisabled ]);
-
-
+	}, [ onDelete, deleteDisabled, deleteLoading ]);
 
 	return (
 		<div className="dex-builder-buttons">
 			<div className="dex-builder-button full-screen">
-				<img src={IconFullscreen} onClick={onFullscreen}/>
+				<img alt="Fullscreen" src={IconFullscreen} onClick={onFullscreen}/>
 			</div>
 			<div className="dex-builder-button save">
-				<LoadingImage className={needsSaving ? 'animation-danger' : ''} icon={IconSave} loading={saveLoading} onClick={save}/>
+				<LoadingImage alt="Save" className={needsSaving ? 'animation-danger' : ''} icon={IconSave} loading={saveLoading} onClick={save}/>
 			</div>
 			<div className="dex-builder-button stats">
-				<img src={IconStats} onClick={onStats}/>
+				<img alt="Show/Hide stats" src={IconStats} onClick={onStats}/>
 			</div>
 			<div className="dex-builder-button import">
-				<img src={IconImport} onClick={onImport}/>
+				<img alt="Import" src={IconImport} onClick={onImport}/>
 			</div>
 			<div className="dex-builder-button export">
-				<img src={IconExport} onClick={onExport}/>
+				<img alt="Export" src={IconExport} onClick={onExport}/>
 			</div>
 			<div className="dex-builder-button delete">
-				<LoadingImage icon={IconDelete} loading={deleteLoading} onClick={_delete}/>
+				<LoadingImage alt="Delete" icon={IconDelete} loading={deleteLoading} onClick={_delete}/>
 			</div>
 		</div>
 	);
@@ -104,12 +104,12 @@ function DeckBuilder({ deck=null, showingStats=false, filters: { query, mana } =
 	const set_main = React.useCallback(cards => {
 		setMain([...cards]);
 		onChange({ main: [...cards], sideboard });
-	}, [ setMain, onChange, sideboard, main ]);
+	}, [ setMain, onChange, sideboard ]);
 
 	const set_sideboard = React.useCallback(cards => {
 		setSideboard([...cards]);
 		onChange({ main, sideboard: [...cards] });
-	}, [ setSideboard, onChange, sideboard, main ]);
+	}, [ setSideboard, onChange, main ]);
 
 	const addCard = React.useCallback(card => {
 		let newCards = [...main];
@@ -151,7 +151,7 @@ function CollectionBuilder({ collection=null, showingStats=false, filters: { que
 
 	const set_cards = React.useCallback(cards => {
 		setCards(cards);
-		onChange(cards);
+		onChange({ cards });
 	}, [ setCards, onChange ]);
 
 	const addCard = React.useCallback(card => {
@@ -165,7 +165,7 @@ function CollectionBuilder({ collection=null, showingStats=false, filters: { que
 		}
 
 		setCards(newCards);
-		onChange(newCards);
+		onChange({ cards: newCards });
 	}, [ cards, onChange ]);
 
 	return (
@@ -193,28 +193,29 @@ function CollectionBuilder({ collection=null, showingStats=false, filters: { que
 	);
 }
 
-export default function Builder({ type='deck', collection=null, history }) {
-	const FILENAME = 'dex-collections.json';
+export default function Builder({ type='deck', defaultCollection=null }) {	
+	const GenericBuilder = type === 'deck' ? DeckBuilder : CollectionBuilder;
+	const GenericCollection = type === 'deck' ? Deck : Collection;
 
-	const [ session, { putFile, getFile, deleteFile } ] = useBlockstack();
-	
+	const id = React.useRef(defaultCollection ? defaultCollection.id : Utils.UUID());
+	const history = useHistory();
+
 	const [ showingStats, setStats ] = React.useState(false);
 	const [ fullscreen, setFullscreen ] = React.useState(false);
 	
-	const [ deck, setDeck ] = React.useState(collection);
+	const [ collection, setCollection ] = React.useState(defaultCollection || new GenericCollection({ id: id.current }));
 	const [ needsSaving, setNeedsSaving ] = React.useState(false);
 	
-	const [ name, setName ] = React.useState(collection ? collection.name : `New ${type}`);
-	const id = React.useRef(collection ? collection.id : Utils.UUID());
-
-	const GenericBuilder = type === 'deck' ? DeckBuilder : CollectionBuilder;
+	const [ name, setName ] = React.useState(defaultCollection ? defaultCollection.name : `New ${type}`);
 
 	const [ filters, setFilters ] = React.useState(undefined);
 
-	const updateDeck = React.useCallback(deck => {
-		setDeck(deck);
+	const [, { saveCollection, deleteCollection: _deleteCollection }] = useLibrary();
+
+	const updateCollection = React.useCallback(params => {
+		setCollection(collection.update(params));
 		setNeedsSaving(true);
-	});
+	}, [collection]);
 
 	React.useEffect(() => {
 		if(needsSaving) {
@@ -243,72 +244,19 @@ export default function Builder({ type='deck', collection=null, history }) {
 	}, [ filters ]);
 
 	const deleteCollection = React.useCallback(() => {
-		// Remove from list
-		return getFile(FILENAME).then(json => {
-			let collections = JSON.parse(json) || {};
-			let _type = collections[`${type}s`] || [];
-			let exists = _type.findIndex(c => c.id === id.current);
-			if(exists === -1) {
-				return Promise.resolve();
-			}
-
-			_type.splice(exists, 1);
-			collections[`${type}s`] = _type;
-			return putFile(FILENAME, JSON.stringify(collections));
-		}).then(() => {
-			return deleteFile(id.current);
-		}).then(() => {
-			history.push('/');
-		}).catch(e => {
-			console.error(e);
-		});
-	}, [ collection ]);
+		return _deleteCollection(collection);
+	}, [ collection, _deleteCollection ]);
 
 	const save = React.useCallback(() => {
-		if(!deck) {
+		if(!collection) {
 			return;
 		}
 
-		let cards = type === 'deck' ? deck.main : deck;
-		if(!cards.length) {
-			return;
-		}
+		collection.name = name;
 
-		const save_deck = {
-			id: id.current,
-			name,
-			card_count: cards.reduce((sum, { qtty }) => sum + qtty, 0),
-			entity: Array.from(new Set(cards.map(c => c.colors).flat(2))).map(c => `{${c}}`).join(''),
-			format: '',
-			image: collection ? collection.image : cards[0].image_uris.art_crop
-		};
-
-		return getFile(FILENAME).then(json => {
-			let data = JSON.parse(json) || {};
-			let decks = data[`${type}s`] || [];
-			// Remove last deck or collection
-			if(collection) {
-				let old = decks.findIndex(c => c.id === collection.id);
-				decks.splice(old, 1);
-			}
-
-			// if deck is collection just take the cards
-			decks.push(save_deck);
-
-			data[`${type}s`] = decks;
-			return putFile(FILENAME, JSON.stringify(data));
-		}).then(() => {
-			let save_cards = type === 'deck' ? { ...save_deck, ...deck }: { ...save_deck, cards: deck };
-			return putFile(id.current, JSON.stringify(save_cards));
-		}).then(() => {
-			setNeedsSaving(false);
-			if(!collection) {
-				history.push(`/${type}s/${id.current}`);
-			}
-		}).catch(e => {
-			console.error(e);
-		});
-	}, [ deck, name, type ]);
+		saveCollection(collection);
+		history.push(`/${collection.type}s/${collection.id}`);
+	}, [ collection, name, saveCollection, history ]);
 
 	// <div className="dex-dropdown-filters">
 	// 	<FormatDropDown onChange={filter}/>
@@ -351,7 +299,7 @@ export default function Builder({ type='deck', collection=null, history }) {
 						deck={collection}
 						showingStats={showingStats}
 						filters={filters}
-						onChange={updateDeck}
+						onChange={updateCollection}
 						fullscreen={fullscreen}
 						isMobile={window.innerWidth <= 900}
 					/>

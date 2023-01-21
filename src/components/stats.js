@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CARD_TYPES, CARD_COLORS } from '../api/scryfall';
-import { PieChart, Pie, PolarAngleAxis, LineChart, Line, BarChart, Bar, Cell, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, LineChart, Line, BarChart, Bar, Cell, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
 import '../styles/charts.css';
 // Mana Curves
@@ -143,7 +143,6 @@ function ColorStats({ cards }) {
 
 	for(let card of cards) {
 		let card_colors = get_colors(card.mana_cost);
-		let { cmc } = card;
 
 		// Color count
 		for(let [col, count] of Object.entries(card_colors)) {
@@ -205,17 +204,17 @@ function ColorStats({ cards }) {
 	);
 }
 
-function CardTypes({ cards }) {
-	return (
-		<div className="dex-stat-section">
-			<div className="dex-stat-section-title">Types /</div>
-			<div className="dex-stats-stats-section">
-				<div className="dex-stat-stats">
-				</div>
-			</div>
-		</div>
-	);
-}
+// function CardTypes({ cards }) {
+// 	return (
+// 		<div className="dex-stat-section">
+// 			<div className="dex-stat-section-title">Types /</div>
+// 			<div className="dex-stats-stats-section">
+// 				<div className="dex-stat-stats">
+// 				</div>
+// 			</div>
+// 		</div>
+// 	);
+// }
 
 export default function CardStats({ cards }) {
 	return (
