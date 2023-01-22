@@ -21,7 +21,8 @@ class GenericCollection {
 		this.card_count_cache = card_count_cache;
 
 		// Will automatically be 'deck' or 'collection'
-		this.type = this.constructor.name.toLowerCase();
+		// DOES NOT WORK ON PROD BECAUSE F**ING WEBPACK MINIFIES THE NAME
+		// this.type = this.constructor.name.toLowerCase();
 	}
 
 	get card_count() {
@@ -53,6 +54,7 @@ export class Deck extends GenericCollection {
 		this.main = main.map(card => new Card(card));
 		this.sideboard = sideboard.map(card => new Card(card));
 		this.commander = commander ? new Card(commander) : null;
+		this.type = 'deck';
 	}
 
 	get card_count() {
@@ -77,6 +79,7 @@ export class Collection extends GenericCollection {
 		super(rest);
 
 		this.cards = cards.map(card => new Card(card));
+		this.type = 'collection';
 	}
 
 	get card_count() {
