@@ -6,6 +6,7 @@ import { CARD_TYPES } from '../api/scryfall';
 import { Input } from './card-input';
 
 import CardInput from './card-input';
+import Card from '../models/card';
 
 import '../styles/card-column.css';
 
@@ -23,7 +24,7 @@ function DroppableCard({ children, onCardDropped=()=>{} }) {
 
 	const drop = React.useCallback((event) => {
 		event.persist();
-		let card = JSON.parse(event.dataTransfer.getData('card'));
+		let card = new Card(JSON.parse(event.dataTransfer.getData('card')));
 		return onCardDropped(card, event);
 	}, [ onCardDropped ]);
 

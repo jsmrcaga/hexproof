@@ -11,12 +11,14 @@ class GenericCollection {
 		entity=null,
 		format='',
 		image='',
+		card_count_cache=null,
 	}) {
 		this.id = id;
 		this.name = name;
 		this.entity = entity;
 		this.format = format;
 		this.image = image;
+		this.card_count_cache = card_count_cache;
 
 		// Will automatically be 'deck' or 'collection'
 		this.type = this.constructor.name.toLowerCase();
@@ -27,14 +29,15 @@ class GenericCollection {
 	}
 
 	toLibrary() {
-		const { id, name, entity, format, image, type } = this;
+		const { id, name, entity, format, image, type, card_count } = this;
 		return {
 			id,
 			name,
 			entity,
 			format,
 			image,
-			type
+			type,
+			card_count_cache: card_count
 		};
 	}
 
@@ -53,7 +56,12 @@ export class Deck extends GenericCollection {
 	}
 
 	get card_count() {
-		return this.main.length + this.sideboard.length;
+		const sum = this.main.length + this.sideboard.length;
+		if(!sum && this.card_count_cache) {
+			return this.card_count_cache;
+		}
+
+		return sum;
 	}
 
 	update({ main=[], sideboard=[], commander=null }) {
@@ -72,6 +80,10 @@ export class Collection extends GenericCollection {
 	}
 
 	get card_count() {
+		if(!this.cards.length && this.card_count_cache) {
+			return this.card_count_cache;
+		}
+
 		return this.cards.length;
 	}
 
@@ -209,19 +221,19 @@ export const useInitLibrary = (callback=()=>{}) => {
 			library = new Library({
 				decks: [],
 				collections: {
-					[main_uuid]: {
+					[main_uuid]: new Collection({
 						name: 'Main Collection',
 						card_count: 0,
 						id: main_uuid,
-						image: MagicLogo
-					}
+						image: MagicLogo,
+					})
 				}
 			});
 
 			write_library(library);
 			
 			window.localStorage.setItem(`hexproof-collection-${main_uuid}`, JSON.stringify({
-				...library.collections[0],
+				...library.collections[main_uuid],
 				cards: []
 			}));
 		}

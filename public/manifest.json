@@ -3,7 +3,7 @@
   "name": "Hexproof",
   "icons": [
     {
-      "src": "https://hexproof.app/hexproof.png",
+      "src": "/hexproof.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
