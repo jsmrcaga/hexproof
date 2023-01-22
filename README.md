@@ -6,7 +6,13 @@ I love the [Scryfall](https://scryfall.com?ref=hexproof-github) search but the r
 
 Hexproof uses [Scryfall](https://scryfall.com?ref=hexproof-github) as an API, so you can use Scryfall grammar to search cards.
 
-# Usage
+# App quirks
+
+- To completely remove a card from a collection use metakey + click (on MacOS for example this would be `⌘ + click`).
+- To Open a card in Gatherer from the search results you can Alt + click (`⌥ + click`)
+- To Open a card in Scryfall from the search results you can meta + click (`⌘ + click`)
+
+# Repo Usage/Installation
 If you have 0 tech knowledge you can use this app at [hexproof.netlify.app](https://hexproof.netlify.app).
 
 Otherwise you will need Node JS and that's it!

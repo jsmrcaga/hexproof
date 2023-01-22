@@ -7,3 +7,7 @@ div.dex-card-preview img {
 	border-radius: 11px;
 	width: 400px;
 }
+
+div.dex-card-preview img:not(:last-child) {
+	margin-right: 5px;
+}

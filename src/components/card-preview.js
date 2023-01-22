@@ -17,41 +17,53 @@ export function Preview({ card, children }) {
 }
 
 export default function CardPreview({ card }) {
-	const height = 450;
 	const offset = 30;
-	const [ mousePosition, setMousePosition ] = React.useState({
-		x: 0,
-		y: 0
-	});
+	const previewRef = React.useRef(null);
 
 	React.useEffect(() => {
 		const listener = ({ x, y }) => {
-			setMousePosition({
-				x: x + offset,
-				y: y + offset
-			});
+			// In case this component returned null
+			if(!previewRef.current) {
+				return;
+			}
+
+			// Move card without react for more performance
+			const element = previewRef.current;
+
+			const { width, height } = element.getBoundingClientRect();
+
+			// Add offset immediately
+
+			const computedX = x + width + offset > window.innerWidth ?
+				// Reverse X (to prevent it hiding the actual element)
+				(x - offset - width)
+				: (x + offset);
+
+			const computedY = y + height + offset > window.innerHeight ?
+				// Max to bottom
+				(window.innerHeight - height)
+				: (y + offset);
+
+			element.style.left = `${computedX}px`;
+			element.style.top = `${computedY}px`;
 		};
+
 		window.addEventListener('mousemove', listener);
 		return () => window.removeEventListener('mousemove', listener);
-	}, []);
+	}, [previewRef]);
 
-	let { x, y } = mousePosition;
+	// TODO: Get double sided cards as well
+	const card_images = card.__faces?.map((uri, index) => {
+		return <img key={uri} alt={`${card.name} face ${index + 1}`} src={uri}/>
+	}) || null;
 
-	if(!x && !y) {
+	if(!card_images) {
 		return null;
-	}
-
-	if(!card.image_uris) {
-		return null;
-	}
-
-	if( y + height > window.innerHeight) {
-		y -= (height + (offset * 2));
 	}
 
 	return (
-		<div className="dex-card-preview" style={{ left: x, top: y }}>
-			<img alt={card.name} src={card.image_uris?.large}/>
+		<div className="dex-card-preview" ref={previewRef}>
+			{card_images}
 		</div>
 	);
 }

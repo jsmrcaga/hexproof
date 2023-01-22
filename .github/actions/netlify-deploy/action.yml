@@ -3,6 +3,11 @@ author: 'Jo Colina'
 description: 'Netlify Deploy'
 
 inputs:
+  NETLIFY_DEPLOY_TO_PROD:
+    description: 'Should deploy to prod?'
+    required: true
+    default: '' # false
+
   NETLIFY_AUTH_TOKEN:
     description: 'Auth token to use with netlify'
     required: true

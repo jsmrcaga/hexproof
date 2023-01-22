@@ -2,6 +2,8 @@ import React from 'react';
 import MagicLogo from '../images/magic-logo.png';
 import Utils from '../utils/utils';
 
+import Card from '../models/card';
+
 class GenericCollection {
 	constructor({
 		id,
@@ -45,9 +47,9 @@ export class Deck extends GenericCollection {
 	constructor({ main=[], sideboard=[], commander=null, ...rest }) {
 		super(rest);
 		
-		this.main = main;
-		this.sideboard = sideboard;
-		this.commander = commander;
+		this.main = main.map(card => new Card(card));
+		this.sideboard = sideboard.map(card => new Card(card));
+		this.commander = commander ? new Card(commander) : null;
 	}
 
 	get card_count() {
@@ -66,7 +68,7 @@ export class Collection extends GenericCollection {
 	constructor({ cards=[], ...rest }) {
 		super(rest);
 
-		this.cards = cards;
+		this.cards = cards.map(card => new Card(card));
 	}
 
 	get card_count() {
