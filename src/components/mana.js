@@ -25,6 +25,7 @@ import Mana16 from '../images/mana/16.svg';
 // Special
 import C from '../images/mana/C.svg';
 import S from '../images/mana/S.svg';
+import X from '../images/mana/X.svg';
 
 // Double Color
 import WU from '../images/mana/WU.svg';
@@ -64,6 +65,7 @@ export const ManaMap = {
 	G,
 	C,
 	S,
+	X,
 	WU,
 	WB,
 	BR,

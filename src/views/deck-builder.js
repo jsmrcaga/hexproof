@@ -12,7 +12,7 @@ import CardStats from '../components/stats';
 import Input from '../components/input';
 
 import IconExport from '../images/icon-export.png';
-import IconImport from '../images/icon-import.png';
+// import IconImport from '../images/icon-import.png';
 import IconStats from '../images/icon-stats.png';
 import IconRefresh from '../images/icon-refresh.svg';
 import IconSave from '../images/icon-save.svg';
@@ -20,6 +20,7 @@ import IconDelete from '../images/icon-delete.svg';
 import IconFullscreen from '../images/icon-fullscreen.svg';
 
 import { useLibrary, Deck, Collection } from '../hooks/useCollection';
+import { useTextExport } from '../hooks/useExport';
 
 import '../styles/builder.css';
 
@@ -82,9 +83,9 @@ function ActionButtons({ needsSaving=false, deleteDisabled=false, onImport=()=>{
 			<div className="dex-builder-button stats">
 				<img alt="Show/Hide stats" src={IconStats} onClick={onStats}/>
 			</div>
-			<div className="dex-builder-button import">
+			{/*<div className="dex-builder-button import">
 				<img alt="Import" src={IconImport} onClick={onImport}/>
-			</div>
+			</div>*/}
 			<div className="dex-builder-button export">
 				<img alt="Export" src={IconExport} onClick={onExport}/>
 			</div>
@@ -212,6 +213,8 @@ export default function Builder({ type='deck', defaultCollection=null }) {
 
 	const [, { saveCollection, deleteCollection: _deleteCollection }] = useLibrary();
 
+	const export_text = useTextExport();
+
 	const updateCollection = React.useCallback(params => {
 		setCollection(collection.update(params));
 		setNeedsSaving(true);
@@ -287,7 +290,7 @@ export default function Builder({ type='deck', defaultCollection=null }) {
 							onSave={save}
 							onDelete={deleteCollection}
 							onImport={()=>{}}
-							onExport={()=>{}}
+							onExport={() => export_text(collection.export())}
 							onStats={() => setStats(!showingStats)}
 							onFullscreen={() => setFullscreen(!fullscreen)}
 						/>

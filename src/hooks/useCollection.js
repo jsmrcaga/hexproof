@@ -25,6 +25,10 @@ class GenericCollection {
 		// this.type = this.constructor.name.toLowerCase();
 	}
 
+	static format_card_list(cards) {
+		return cards.map(card => `${card.qtty}x ${card.name}`).join('\n');
+	}
+
 	get card_count() {
 		throw new Error('card_count must be overriden');
 	}
@@ -44,6 +48,10 @@ class GenericCollection {
 
 	update() {
 		throw new Error('update must be overriden');
+	}
+
+	export() {
+		throw new Error('export must be overriden');
 	}
 }
 
@@ -72,6 +80,13 @@ export class Deck extends GenericCollection {
 		this.commander = commander;
 		return new Deck(this);
 	}
+
+	export() {
+		const main_list = this.constructor.format_card_list(this.main);
+		const sideboard_list = this.constructor.format_card_list(this.main);
+
+		return ['// Main\n', main_list,  '\n\n// Sideboard\n', sideboard_list].join('\n');
+	}
 }
 
 export class Collection extends GenericCollection {
@@ -93,6 +108,10 @@ export class Collection extends GenericCollection {
 	update({ cards=[] }) {
 		this.cards = cards;
 		return new Collection(this);
+	}
+
+	export() {
+		return this.constructor.format_card_list(this.cards);
 	}
 }
 
