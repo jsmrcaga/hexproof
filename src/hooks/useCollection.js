@@ -83,7 +83,7 @@ export class Deck extends GenericCollection {
 
 	export() {
 		const main_list = this.constructor.format_card_list(this.main);
-		const sideboard_list = this.constructor.format_card_list(this.main);
+		const sideboard_list = this.constructor.format_card_list(this.sideboard);
 
 		return ['// Main\n', main_list,  '\n\n// Sideboard\n', sideboard_list].join('\n');
 	}
